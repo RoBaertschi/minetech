@@ -26,7 +26,7 @@ public class ModularArmorWorkspaceScreen extends BasicScreen<ModularArmorWorkspa
         int y = (height - imageHeight)/2;
         RenderSystem.setShaderTexture(0, TEXTURE);
 
-        blit(poseStack, x, y, 0, 0, imageHeight, imageHeight);
+        this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 
         energyInfoArea.draw(poseStack);
     }

@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import robaertschi.minetech.Minetech;
+import robaertschi.minetech.item.ModItems;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -16,7 +17,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-
+        simpleItem(ModItems.MODULAR_ARMOR_HELMET);
+        simpleItem(ModItems.MODULAR_ARMOR_CHESTPLATE);
+        simpleItem(ModItems.MODULAR_ARMOR_LEGGINGS);
+        simpleItem(ModItems.MODULAR_ARMOR_BOOTS);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

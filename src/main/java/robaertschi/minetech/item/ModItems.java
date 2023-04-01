@@ -17,17 +17,17 @@ public class ModItems {
 
     public static final RegistryObject<Item> MODULAR_ARMOR_HELMET =
             ITEMS.register("modular_armor_helmet", () ->
-                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
+                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.HELMET));
     public static final RegistryObject<Item> MODULAR_ARMOR_CHESTPLATE =
             ITEMS.register("modular_armor_chestplate", () ->
-                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.CHESTPLATE));
 
     public static final RegistryObject<Item> MODULAR_ARMOR_LEGGINGS =
             ITEMS.register("modular_armor_leggings", () ->
-                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.LEGGINGS));
     public static final RegistryObject<Item> MODULAR_ARMOR_BOOTS =
             ITEMS.register("modular_armor_boots", () ->
-                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+                    new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.BOOTS));
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

@@ -158,6 +158,7 @@ public class ModularArmorWorkspaceBlockEntity extends BasicBlockEntity implement
 
     public static void tick(Level level, BlockPos pos, BlockState state, ModularArmorWorkspaceBlockEntity blockEntity) {
         if (!blockEntity.itemHandler.getStackInSlot(0).isEmpty()) {
+
             var stack = blockEntity.itemHandler.getStackInSlot(0);
             stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(iEnergyStorage -> {
                 blockEntity.ENERGY_STORAGE.extractEnergy(iEnergyStorage.receiveEnergy(blockEntity.tier.getBaseEnergyMultiplier() * 8, false), false);

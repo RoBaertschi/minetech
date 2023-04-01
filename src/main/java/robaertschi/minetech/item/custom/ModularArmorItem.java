@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +17,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import robaertschi.minetech.api.util.CapabilityEnergyProvider;
 import robaertschi.minetech.api.util.IEnergyContainer;
 import robaertschi.minetech.api.util.ModEnergyStorage;
 import robaertschi.minetech.util.Constants;
@@ -24,84 +26,37 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.util.List;
 
 public class ModularArmorItem extends ArmorItem {
-    public ModularArmorItem(ArmorMaterial material, Type type, Properties properties) {
-        super(material, type, properties);
-    }
-
-    private ModEnergyStorage newStorage() {
-        return new ModEnergyStorage(30000, 32) {
-            @Override
-            public void onEnergyChanged() {
-
-            }
-        };
+    public ModularArmorItem(ArmorMaterial material, Type type) {
+        super(material, type, new Properties().stacksTo(1));
     }
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new ICapabilitySerializable<CompoundTag>() {
-            private ModEnergyStorage energyStorage = newStorage();
-            private ItemStackHandler itemHandler = new ItemStackHandler(4);
-            private LazyOptional<IEnergyStorage> energyStorageHolder = LazyOptional.of(() -> energyStorage);
-            private LazyOptional<IItemHandler> itemHandlerHolder = LazyOptional.of(() -> itemHandler);
-
-
-            @Override
-            public CompoundTag serializeNBT() {
-                var tag = new CompoundTag();
-                tag.putInt("modular_armor.energy", energyStorage.getEnergyStored());
-                tag.put("inventory", itemHandler.serializeNBT());
-                return tag;
-            }
-
-            @Override
-            public void deserializeNBT(CompoundTag nbt) {
-                energyStorage.setEnergy(nbt.getInt("modular_armor.energy"));
-                itemHandler.deserializeNBT(nbt.getCompound("inventory"));
-            }
-
-            @Override
-            public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-                if (cap == ForgeCapabilities.ENERGY) {
-                    return energyStorageHolder.cast();
-                }
-                if (cap == ForgeCapabilities.ITEM_HANDLER) {
-                    return itemHandlerHolder.cast();
-                }
-                return LazyOptional.empty();
-            }
-        };
+        return new CapabilityEnergyProvider(stack, 30000);
     }
 
     @Override
-    public @Nullable CompoundTag getShareTag(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(iEnergyStorage -> {
-            tag.putInt("modular_armor.energy", iEnergyStorage.getEnergyStored());
-        });
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            tag.put("modular_armor.inventory", ((ItemStackHandler) iItemHandler).serializeNBT());
-        });
-        return tag;
+    public int getBarWidth(ItemStack stack) {
+        return stack.getCapability(ForgeCapabilities.ENERGY, null)
+                .map(e -> Math.min(13 * e.getEnergyStored() / e.getMaxEnergyStored(), 13))
+                .orElse(0);
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(iEnergyStorage -> {
-            iEnergyStorage.receiveEnergy(nbt.getInt("modular_armor.energy")-iEnergyStorage.getEnergyStored(), false);
-        });
-
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            ((ItemStackHandler) iItemHandler).deserializeNBT(nbt.getCompound("modular_armor.inventory"));
-        });
+    public int getBarColor(ItemStack stack) {
+        return stack.getCapability(ForgeCapabilities.ENERGY)
+                .map(e -> Mth.hsvToRgb(Math.max(0.0F, (float) e.getEnergyStored() / (float) e.getMaxEnergyStored()) / 3.0F, 1.0F, 1.0F))
+                .orElse(super.getBarColor(stack));
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flags) {
-        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(cap -> {
-            String charge = String.valueOf(cap.getEnergyStored());
-            String capacity = String.valueOf(cap.getMaxEnergyStored());
-            components.add(Component.literal("Energy: " + charge + "/" + capacity));
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flags) {
+        super.appendHoverText(stack, level, components, flags);
+
+        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(energy -> {
+            components.add(Component.literal("Energy: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored()));
         });
     }
+
+
 }

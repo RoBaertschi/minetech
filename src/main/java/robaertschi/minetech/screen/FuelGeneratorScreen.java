@@ -27,7 +27,7 @@ public class FuelGeneratorScreen extends BasicScreen<FuelGeneratorMenu> {
         int y = (height - imageHeight)/2;
         RenderSystem.setShaderTexture(0, TEXTURE);
 
-        blit(poseStack, x, y, 0, 0, imageHeight, imageHeight);
+        blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 
         if (menu.isGenerating()) {
             renderProgressArrow(poseStack, x + 105, y + 33, 176, 0, 8,

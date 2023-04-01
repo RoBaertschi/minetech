@@ -1,1 +1,5 @@
-// 1.19.4	2023-03-20T10:45:37.1393534	Item Models: minetech
+// 1.19.4	2023-04-01T11:48:51.1364163	Item Models: minetech
+cacf34ce4f7a5bf411e61b658750f323918166f4 assets/minetech/models/item/modular_armor_boots.json
+72021d7ca33bc416c917a06e45cd127e269d26dc assets/minetech/models/item/modular_armor_chestplate.json
+71926094daa0d54690d2e037407620496e83dfb9 assets/minetech/models/item/modular_armor_helmet.json
+5af975df77dc07ee34280c398200f0cf51d9827e assets/minetech/models/item/modular_armor_leggings.json

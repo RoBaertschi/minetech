@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import robaertschi.minetech.Minetech;
@@ -56,13 +57,13 @@ public class ModularArmorWorkspaceMenu extends BasicMenu<ModularArmorWorkspaceBl
 
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new VariableSlotItemHandler(handler, 0, 86, 30));
-            handler.getStackInSlot(0).getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(this::addCustomSlots);
+            this.addSlot(new SlotItemHandler(handler, 0, 86, 30));
+            /*handler.getStackInSlot(0).getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(this::addCustomSlots);
 
             if (!handler.getStackInSlot(0).getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
                 addCustomSlots(emptyItemStackHandler);
                 deactivateCustomSlots();
-            }
+            }*/
         });
 
         this.player = inv.player;
@@ -70,7 +71,9 @@ public class ModularArmorWorkspaceMenu extends BasicMenu<ModularArmorWorkspaceBl
 
     @Override
     public void updateItemStacks() {
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+        return;
+
+        /*this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             if (!handler.getStackInSlot(0).getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
                 deactivateCustomSlots();
             }
@@ -82,7 +85,7 @@ public class ModularArmorWorkspaceMenu extends BasicMenu<ModularArmorWorkspaceBl
             slot.setChanged();
         }
         ((ServerPlayer) player).doCloseContainer();
-        NetworkHooks.openScreen((ServerPlayer) player, blockEntity, blockEntity.getBlockPos());
+        NetworkHooks.openScreen((ServerPlayer) player, blockEntity, blockEntity.getBlockPos());*/
     }
 
     protected void addCustomSlots(IItemHandler itemHandler) {
