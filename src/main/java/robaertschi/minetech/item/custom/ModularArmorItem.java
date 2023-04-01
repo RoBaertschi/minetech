@@ -41,7 +41,7 @@ public class ModularArmorItem extends ArmorItem {
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ICapabilitySerializable<CompoundTag>() {
             private ModEnergyStorage energyStorage = newStorage();
-            private ItemStackHandler itemHandler = new ItemStackHandler(Constants.MODULAR_ARMOR_UPGRADES);
+            private ItemStackHandler itemHandler = new ItemStackHandler(4);
             private LazyOptional<IEnergyStorage> energyStorageHolder = LazyOptional.of(() -> energyStorage);
             private LazyOptional<IItemHandler> itemHandlerHolder = LazyOptional.of(() -> itemHandler);
 

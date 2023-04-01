@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,6 +19,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import robaertschi.minetech.api.blockentity.BasicBlockEntity;
@@ -155,7 +157,7 @@ public class ModularArmorWorkspaceBlockEntity extends BasicBlockEntity implement
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, ModularArmorWorkspaceBlockEntity blockEntity) {
-        if (blockEntity.itemHandler.getStackInSlot(0).isEmpty()) {
+        if (!blockEntity.itemHandler.getStackInSlot(0).isEmpty()) {
             var stack = blockEntity.itemHandler.getStackInSlot(0);
             stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(iEnergyStorage -> {
                 blockEntity.ENERGY_STORAGE.extractEnergy(iEnergyStorage.receiveEnergy(blockEntity.tier.getBaseEnergyMultiplier() * 8, false), false);
