@@ -1,5 +1,9 @@
 package robaertschi.minetech.api.util;
 
+import net.minecraft.world.item.ItemStack;
+import robaertschi.minetech.item.ModItems;
+import robaertschi.minetech.item.custom.modulararmor.ModularArmorItem;
+
 /**
  * Tier used for most machines.
  * @author RoBaertschi
@@ -8,6 +12,7 @@ package robaertschi.minetech.api.util;
  */
 public enum Tier {
     TIER_1(8, 1, 1),
+    TIER_2(32, 2, 4),
     ;
     final int baseEnergyMultiplier;
     final int baseEfficiencyMultiplier;
@@ -35,5 +40,18 @@ public enum Tier {
 
     public int getUpgrades() {
         return upgrades;
+    }
+
+    public static Tier getTierFromItemStack(ItemStack stack) {
+        if (stack.getItem() == ModItems.TIER_2_UPGRADE.get()) {
+            return TIER_2;
+        }
+
+        return TIER_1;
+    }
+
+    public static boolean isTierHigher(Tier lower, Tier higher) {
+        if (lower == higher) return false;
+        return lower.compareTo(higher) < 0;
     }
 }

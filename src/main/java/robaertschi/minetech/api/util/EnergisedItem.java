@@ -35,7 +35,7 @@ public class EnergisedItem extends EnergyStorage {
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        return 0;
+        return receiveEnergy(-maxExtract, simulate);
     }
 
     @Override

@@ -1,16 +1,14 @@
 package robaertschi.minetech.item;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import robaertschi.minetech.Minetech;
 import robaertschi.minetech.item.custom.ModArmorMaterials;
-import robaertschi.minetech.item.custom.ModularArmorItem;
+import robaertschi.minetech.item.custom.modulararmor.ModularArmorItem;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Minetech.MODID);
@@ -28,6 +26,11 @@ public class ModItems {
     public static final RegistryObject<Item> MODULAR_ARMOR_BOOTS =
             ITEMS.register("modular_armor_boots", () ->
                     new ModularArmorItem(ModArmorMaterials.MODULAR_ARMOR, ArmorItem.Type.BOOTS));
+
+    public static final RegistryObject<Item> TIER_2_UPGRADE =
+            ITEMS.register("tier_2_upgrade", () ->
+                        new Item(new Item.Properties())
+                    );
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

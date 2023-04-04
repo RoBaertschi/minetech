@@ -3,6 +3,8 @@ package robaertschi.minetech.api.block;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,6 +18,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import robaertschi.minetech.api.blockentity.BasicBlockEntity;
 import robaertschi.minetech.api.util.IItemContainer;
+import robaertschi.minetech.api.util.Tier;
+import robaertschi.minetech.item.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -70,9 +74,13 @@ public abstract class BasicBlockWithEntity extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean p_60519_) {
         if (pState.getBlock() != pNewState.getBlock()) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            BasicBlockEntity blockEntity = (BasicBlockEntity) pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof IItemContainer) {
                 ((IItemContainer) blockEntity).drops();
+            }
+
+            if (blockEntity.tier != Tier.TIER_1) {
+                Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), new ItemStack(ModItems.TIER_2_UPGRADE.get()));
             }
         }
 

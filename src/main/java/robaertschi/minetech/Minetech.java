@@ -40,7 +40,7 @@ public class Minetech {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "minetech";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public Minetech() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

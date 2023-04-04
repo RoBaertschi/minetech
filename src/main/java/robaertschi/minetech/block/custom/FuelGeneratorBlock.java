@@ -16,8 +16,11 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import robaertschi.minetech.api.block.BasicBlockWithEntity;
+import robaertschi.minetech.api.util.Tier;
 import robaertschi.minetech.blockentity.FuelGeneratorBlockEntity;
 import robaertschi.minetech.blockentity.ModBlockEntities;
+import robaertschi.minetech.blockentity.ModularArmorWorkspaceBlockEntity;
+import robaertschi.minetech.item.ModItems;
 
 public class FuelGeneratorBlock extends BasicBlockWithEntity {
     public FuelGeneratorBlock(Properties properties) {
@@ -29,6 +32,13 @@ public class FuelGeneratorBlock extends BasicBlockWithEntity {
         if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof FuelGeneratorBlockEntity) {
+                if (player.getItemInHand(hand).getItem() == ModItems.TIER_2_UPGRADE.get() && Tier.isTierHigher(((FuelGeneratorBlockEntity) entity).tier, Tier.TIER_2)) {
+                    player.getItemInHand(hand).shrink(1);
+                    ((FuelGeneratorBlockEntity) entity).tier = Tier.TIER_2;
+                    return InteractionResult.CONSUME;
+                }
+
+
                 NetworkHooks.openScreen((ServerPlayer) player, (FuelGeneratorBlockEntity) entity, pos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
