@@ -1,16 +1,11 @@
 package robaertschi.minetech.item.custom.modulararmor;
 
-import com.google.common.collect.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -20,8 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import robaertschi.minetech.api.capabilities.CapabilityNotPresentException;
 import robaertschi.minetech.api.util.CapabilityEnergyProvider;
 
 import java.util.List;
@@ -140,14 +135,14 @@ public class ModularArmorItem extends ArmorItem {
     protected void onHelmetTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
 
-        if (player.getEffect(MobEffects.NIGHT_VISION) == null || player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 200) {
+        if (player.getEffect(MobEffects.NIGHT_VISION) == null || player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 210) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 2));
             energyStorage.extractEnergy(1, false);
         }
 
     }
     protected void onChestplateTick(ItemStack stack, Level level, Player player) {
-        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
         if (player.getAbilities().flying) {
             energyStorage.extractEnergy(1, false);
@@ -157,7 +152,7 @@ public class ModularArmorItem extends ArmorItem {
         }
     }
     protected void onLeggingsTick(ItemStack stack, Level level, Player player) {
-        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
         if(player.getEffect(MobEffects.MOVEMENT_SPEED) == null) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 2));
@@ -165,7 +160,12 @@ public class ModularArmorItem extends ArmorItem {
         }
     }
     protected void onBootsTick(ItemStack stack, Level level, Player player) {
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
+        if (player.getEffect(MobEffects.JUMP) == null) {
+            player.addEffect(new MobEffectInstance(MobEffects.JUMP, 60, 1));
+            energyStorage.extractEnergy(1, false);
+        }
     }
 
     public void onUnequip(ItemStack stack, Player player) {
