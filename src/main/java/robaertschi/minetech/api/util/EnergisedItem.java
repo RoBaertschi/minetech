@@ -8,8 +8,9 @@ import net.minecraftforge.energy.EnergyStorage;
  * Under MIT-License: https://github.com/Direwolf20-MC/MiningGadgets/blob/master/LICENSE.txt
  */
 
+@SuppressWarnings("DataFlowIssue")
 public class EnergisedItem extends EnergyStorage {
-    private ItemStack stack;
+    private final ItemStack stack;
 
     public EnergisedItem(ItemStack stack, int capacity) {
         super(getMaxCapacity(stack, capacity), Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -24,7 +25,7 @@ public class EnergisedItem extends EnergyStorage {
 
         return stack.getTag().getInt("max_energy");
     }
-
+    @SuppressWarnings("unused")
     public void updatedMaxEnergy(int max) {
         stack.getOrCreateTag().putInt("max_energy", max);
         this.capacity = max;

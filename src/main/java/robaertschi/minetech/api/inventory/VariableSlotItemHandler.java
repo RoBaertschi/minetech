@@ -7,12 +7,14 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class VariableSlotItemHandler extends SlotItemHandler {
     public boolean enabled = true;
     public IItemHandler variableItemHandler;
     public final int itemHandlerIndex;
     public final int index;
 
+    @SuppressWarnings("unused")
     public VariableSlotItemHandler(IItemHandler itemHandler, int itemAndSlotIndex, int xPosition, int yPosition) {
         super(itemHandler, itemAndSlotIndex, xPosition, yPosition);
 
@@ -60,12 +62,6 @@ public class VariableSlotItemHandler extends SlotItemHandler {
     }
 
     @Override
-    public void onQuickCraft(@NotNull ItemStack oldStackIn, @NotNull ItemStack newStackIn)
-    {
-
-    }
-
-    @Override
     public int getMaxStackSize()
     {
         return this.getItemHandler().getSlotLimit(this.itemHandlerIndex);
@@ -80,8 +76,7 @@ public class VariableSlotItemHandler extends SlotItemHandler {
 
         IItemHandler handler = this.getItemHandler();
         ItemStack currentStack = handler.getStackInSlot(itemHandlerIndex);
-        if (handler instanceof IItemHandlerModifiable) {
-            IItemHandlerModifiable handlerModifiable = (IItemHandlerModifiable) handler;
+        if (handler instanceof IItemHandlerModifiable handlerModifiable) {
 
             handlerModifiable.setStackInSlot(itemHandlerIndex, ItemStack.EMPTY);
 

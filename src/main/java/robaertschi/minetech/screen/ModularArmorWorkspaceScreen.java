@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 import robaertschi.minetech.Minetech;
-import robaertschi.minetech.api.screen.BasicMenu;
 import robaertschi.minetech.api.screen.BasicScreen;
 
 public class ModularArmorWorkspaceScreen extends BasicScreen<ModularArmorWorkspaceMenu> {
@@ -19,14 +19,14 @@ public class ModularArmorWorkspaceScreen extends BasicScreen<ModularArmorWorkspa
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float p_97788_, int p_97789_, int p_97790_) {
+    protected void renderBg(@NotNull PoseStack poseStack, float p_97788_, int p_97789_, int p_97790_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int x = (width - imageWidth)/2;
         int y = (height - imageHeight)/2;
         RenderSystem.setShaderTexture(0, TEXTURE);
 
-        this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
+        blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 
         energyInfoArea.draw(poseStack);
     }

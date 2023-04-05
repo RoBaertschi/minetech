@@ -153,7 +153,6 @@ public class ModularArmorItem extends ArmorItem {
         }
     }
     @SuppressWarnings({"unused"})
-
     protected void onLeggingsTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
@@ -163,7 +162,6 @@ public class ModularArmorItem extends ArmorItem {
         }
     }
     @SuppressWarnings({"unused"})
-
     protected void onBootsTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 

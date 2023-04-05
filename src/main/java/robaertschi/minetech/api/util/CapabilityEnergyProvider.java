@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class CapabilityEnergyProvider implements ICapabilityProvider {
     private ItemStack stack;
     private int energyCapacity;
-    private LazyOptional<IEnergyStorage> capability = LazyOptional.of(() -> new EnergisedItem(stack, energyCapacity));
+    private final LazyOptional<IEnergyStorage> capability = LazyOptional.of(() -> new EnergisedItem(stack, energyCapacity));
 
     public CapabilityEnergyProvider(ItemStack stack, int energyCapacity) {
         this.stack = stack;
