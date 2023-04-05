@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import robaertschi.minetech.api.capabilities.CapabilityNotPresentException;
 import robaertschi.minetech.api.util.CapabilityEnergyProvider;
@@ -48,7 +49,7 @@ public class ModularArmorItem extends ArmorItem {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+        IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY, null).orElseThrow(CapabilityNotPresentException::new);
         return (energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored());
     }
 
@@ -67,19 +68,17 @@ public class ModularArmorItem extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flags) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flags) {
         super.appendHoverText(stack, level, components, flags);
 
-        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(energy -> {
-            components.add(Component.literal("Energy: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored()));
-        });
+        stack.getCapability(ForgeCapabilities.ENERGY, null).ifPresent(energy -> components.add(Component.literal("Energy: " + energy.getEnergyStored() + "/" + energy.getMaxEnergyStored())));
     }
 
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player) {
         var item = (ModularArmorItem) stack.getItem();
 
-        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
         if (energyStorage.getEnergyStored() <= 0) {
             player.getArmorSlots().forEach(itemStack -> {
                 if (itemStack.getItem() instanceof ModularArmorItem armorItem) {
@@ -107,8 +106,9 @@ public class ModularArmorItem extends ArmorItem {
     }
 
     @Override
+    @SuppressWarnings({"DataFlowIssue"})
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
         if (energyStorage.getEnergyStored() <= 0) {
             if (entity instanceof Player player) {
                 player.drop(stack, false);
@@ -131,9 +131,9 @@ public class ModularArmorItem extends ArmorItem {
     }
 
 
-
+    @SuppressWarnings({"unused", "DataFlowIssue"})
     protected void onHelmetTick(ItemStack stack, Level level, Player player) {
-        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
         if (player.getEffect(MobEffects.NIGHT_VISION) == null || player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 210) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 2));
@@ -141,6 +141,7 @@ public class ModularArmorItem extends ArmorItem {
         }
 
     }
+    @SuppressWarnings({"unused"})
     protected void onChestplateTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
@@ -151,6 +152,8 @@ public class ModularArmorItem extends ArmorItem {
             }
         }
     }
+    @SuppressWarnings({"unused"})
+
     protected void onLeggingsTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
@@ -159,6 +162,8 @@ public class ModularArmorItem extends ArmorItem {
             energyStorage.extractEnergy(1, false);
         }
     }
+    @SuppressWarnings({"unused"})
+
     protected void onBootsTick(ItemStack stack, Level level, Player player) {
         var energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElseThrow(CapabilityNotPresentException::new);
 
