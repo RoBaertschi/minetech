@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -34,17 +33,17 @@ import robaertschi.minetech.networking.ModMessages;
 import robaertschi.minetech.screen.FuelGeneratorMenu;
 
 public class FuelGeneratorBlockEntity extends BasicBlockEntity implements IEnergyContainer, IItemContainer {
-    private RecipeManager recipeManager;
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-            if (!level.isClientSide()) {
+            if (level != null && !level.isClientSide()) {
                 ModMessages.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
             }
         }
 
+        @SuppressWarnings("SwitchStatementWithTooFewBranches")
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return switch (slot) {
@@ -105,8 +104,7 @@ public class FuelGeneratorBlockEntity extends BasicBlockEntity implements IEnerg
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
-        this.recipeManager = player.level.getRecipeManager();
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
         ModMessages.sendToClients(new EnergySyncS2CPacket(this.ENERGY_STORAGE.getEnergyStored(), getBlockPos()));
         return new FuelGeneratorMenu(id, inv, this, this.data);
     }
@@ -147,7 +145,7 @@ public class FuelGeneratorBlockEntity extends BasicBlockEntity implements IEnerg
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
 
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
@@ -185,6 +183,7 @@ public class FuelGeneratorBlockEntity extends BasicBlockEntity implements IEnerg
         basicSetHandler(itemStackHandler, itemHandler);
     }
 
+    @SuppressWarnings("unused")
     public static void tick(Level level, BlockPos pos, BlockState state, FuelGeneratorBlockEntity blockEntity) {
         if (blockEntity.maxProgress == 0) {
             blockEntity.progress = 0;
@@ -214,7 +213,7 @@ public class FuelGeneratorBlockEntity extends BasicBlockEntity implements IEnerg
                 var directionBlockEntity = level.getBlockEntity(pos.relative(direction));
                 // Check for null
                 if (directionBlockEntity != null) {
-                    directionBlockEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent((handler) -> {
+                    directionBlockEntity.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent((handler) -> {
                         if (handler.canReceive()) {
                             // Get how much it can receive.
                             var simulatedValue = handler.receiveEnergy(256, true);

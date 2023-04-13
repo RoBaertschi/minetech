@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetech:block/modular_armor_workspace",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minetech:block/modular_armor_workspace"
+    },
+    "facing=south": {
+      "model": "minetech:block/modular_armor_workspace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minetech:block/modular_armor_workspace",
+      "y": 270
+    }
+  }
+}

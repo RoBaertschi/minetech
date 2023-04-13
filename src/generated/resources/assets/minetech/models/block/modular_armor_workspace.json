@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "minetech:block/modular_armor_workspace_side",
+    "side": "minetech:block/modular_armor_workspace_side",
+    "top": "minetech:block/modular_armor_workspace_top"
+  }
+}
